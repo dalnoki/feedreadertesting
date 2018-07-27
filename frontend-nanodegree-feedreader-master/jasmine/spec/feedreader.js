@@ -1,50 +1,46 @@
-
 $(function() {
     describe('RSS Feeds', function() {
-        /* tests to make sure that the allFeeds variable has been defined
-         * and that it is not
-         * empty.
-         */
-        it('are defined', function() {
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
-        });
-
-        it('has URL defined', function() {
-            /*  a test that loops through each feed
-             * in the allFeeds object and ensures it has a name defined
-             * and that the name is not empty.
-             */
-
+        it('names are defined', function() {
             for (let i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].hasOwnProperty("name")).toBe(true);
-                expect(allFeeds[i].name.length).toBeGreaterThan(0);
-                expect(allFeeds[i].hasOwnProperty("url")).toBe(true);
-                expect(allFeeds[i].url.length).toBeGreaterThan(0);
+                expect(allFeeds[i].name).toBeDefined(); // the current allFeeds entry's name is defined
+                expect(allFeeds[i].name.length).toBeGreaterThan(0); // the current allFeeds entry's name is longer than 0
             }
         });
+
+        it('url is defined', function() {
+            for (let i = 0; i < allFeeds.length; i++) {
+                expect(allFeeds[i].url).toBeDefined(); // the current allFeeds url is defined
+                expect(allFeeds[i].url.length).toBeGreaterThan(0); //the current allFeeds entry's name is longer than 0
+            }
+        });
+        // test to make sure that the allFeeds variable has been defined and that it is not empty
+        it('is defined', function() {
+            expect(allFeeds).toBeDefined();
+            expect(allFeeds.length).not.toBe(0);
+        })
     });
 
     describe('The menu', function() {
+        // tests to make sure that the menu is hiddeny by default and it appears / disappears when it's clicked again
+
+        let menuIcon = document.querySelector(".menu-icon-link");
         let body = document.body;
-        let hiddenMenu = document.querySelector(".menu-hidden");
-        let iconList = document.querySelector(".icon-list");
+
 
         it("is hidden by default", function() {
-            expect(body).toEqual(hiddenMenu);
+            expect($(body).hasClass(".menu-hidden")).toBe(true);
         });
 
         it("appears when clicked", function() {
-            iconList.click();
-            expect(body.classList.contains(".menu-hidden")).toBe(false);
+            menuIcon.click();
+            expect($(body).hasClass(".menu-hidden")).toBe(false);
         });
-        it("disappears when clicked again", function() {
-            iconList.click();
-            iconList.click();
-            expect(body.classList.contains(".menu-hidden")).toBe(false);
-            iconList.click();
 
+        it("disappears when clicked again", function() {
+            menuIcon.click();
+            expect($(body).hasClass(".menu-hidden")).toBe(true);
         });
+
     });
 
 
@@ -52,49 +48,36 @@ $(function() {
         /* a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
-         * 
-         * 
+         *
+         *
          */
+
         beforeEach(function(done) {
-            setTimeout(function() {
-                loadFeed(0);
-                done();
-            }, 2500);
+            loadFeed(0, done);
         });
 
+
         it("feed is loaded", function() {
-            let feedChildNodes = document.querySelector(".feed").childNodes[1].childNodes[1];
             let entry = document.querySelector(".entry");
-
-            expect(feedChildNodes).toEqual(entry);
-
+            expect($(entry).length).toBeGreaterThan(0);
         });
     });
 
     describe("New Feed selection", function() {
-        /*  a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes
-         */
-
-        let feedEmpty = true;
+        //  a test that ensures when a new feed is loaded by the loadFeed function and that the content actually changes
+        let firstFeed = "";
 
         beforeEach(function(done) {
-            setTimeout(function() {
-                loadFeed(0);
-                done();
-            }, 2500);
+            loadFeed(0, function() {
+                firstFeed = $(".feed").html();
+                loadFeed(2, function() {
+                    done();
+                });
+            });
         });
 
         it("the content changes", function() {
-            let feed = document.querySelector(".feed");
-            let entry = document.querySelector(".entry-link");
-
-            if (entry.parentNode == feed) {
-                feedEmpty = true;
-            }
-
-            expect(feedEmpty).toBe(true);
-
+            expect($('.feed')).not.toEqual(firstFeed)
         });
     });
 
