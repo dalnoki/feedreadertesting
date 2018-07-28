@@ -21,24 +21,24 @@ $(function() {
     });
 
     describe('The menu', function() {
-        // tests to make sure that the menu is hiddeny by default and it appears / disappears when it's clicked again
+        // tests to make sure that the menu is hidden by default and it appears / disappears when it's clicked again
 
         let menuIcon = document.querySelector(".menu-icon-link");
         let body = document.body;
 
 
         it("is hidden by default", function() {
-            expect($(body).hasClass(".menu-hidden")).toBe(true);
+            expect($(body).hasClass("menu-hidden")).toBe(true);
         });
 
         it("appears when clicked", function() {
             menuIcon.click();
-            expect($(body).hasClass(".menu-hidden")).toBe(false);
+            expect($(body).hasClass("menu-hidden")).toBe(false);
         });
 
         it("disappears when clicked again", function() {
             menuIcon.click();
-            expect($(body).hasClass(".menu-hidden")).toBe(true);
+            expect($(body).hasClass("menu-hidden")).toBe(true);
         });
 
     });
