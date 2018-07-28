@@ -58,8 +58,8 @@ $(function() {
 
 
         it("feed is loaded", function() {
-            let entry = document.querySelector(".entry");
-            expect($(entry).length).toBeGreaterThan(0);
+            let feedAndEntry = document.querySelector(".feed .entry");
+            expect($(feedAndEntry).length).toBeTruthy();
         });
     });
 
